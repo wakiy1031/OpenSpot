@@ -1,13 +1,14 @@
-OpenSpot
-=====
+# OpenSpot
 
 このリポジトリは Expo（expo-router / tabs テンプレート）で構築した React Native アプリのモノレポ構成です。ルート直下に `app/`（画面・ルーティング）と `assets/`（画像・フォント）を持つ構成です。
 
 目標
+
 - **開発環境のセットアップ**を素早く終え、iOS/Android/Web のいずれでも Expo 上で動作確認できる状態にする
 - 以降の実装に備え、基本的なフォルダ構成と起動コマンドを整備する
 
 前提条件
+
 - Node.js 20 以上（LTS 推奨）
 - npm 10 以上
 - iOS 実機/シミュレータ起動: Xcode（macOS のみ）
@@ -15,21 +16,24 @@ OpenSpot
 - モバイル実機で確認する場合は Expo Go アプリ（App Store / Google Play）
 
 初期セットアップ（初回のみ）
+
 1. 依存関係をインストール
    - ルートに移動して以下を実行
      - `npm install`
 2. 動作確認
-   - 開発サーバ起動: `npm run start`
+   - 開発サーバ起動（安定化のため localhost モード）: `npm run start`
    - iOS シミュレータ: `npm run ios`
    - Android エミュレータ: `npm run android`
    - Web: `npm run web`
 
 日常開発フロー
+
 1. 開発サーバを起動（`npm run start`）
 2. 端末またはシミュレータで確認（`npm run ios` / `npm run android` / `npm run web`）
 3. テスト（任意）: `npm test`
 
 ディレクトリ構成（要点）
+
 ```
 OpenSpot/
   app/                     # 画面・ルーティング（expo-router）
@@ -43,15 +47,18 @@ OpenSpot/
 ```
 
 よくあるトラブルと対処
+
 - iOS/Android のビルドが開始しない
   - Xcode / Android Studio のセットアップ（コマンドラインツール、SDK、エミュレータ）を確認
   - `npm run start` 実行後に `i` または `a` キーで起動できない場合は各スクリプトを使用
 - Metro Bundler のキャッシュ不整合
   - サーバ停止後に `rm -rf node_modules && npm install` を実行
+  - 接続モードの切替で改善する場合あり: LAN（`npm run start:lan`）、トンネル（`npm run start:tunnel`）
 - ポート衝突
   - 既存の Metro/Expo が動作していないか確認し、不要なプロセスを停止
 
 スクリプト一覧
+
 - `npm run start`: Expo 開発サーバ起動
 - `npm run ios`: iOS シミュレータ起動
 - `npm run android`: Android エミュレータ起動
@@ -59,6 +66,7 @@ OpenSpot/
 - `npm test`: Jest によるテスト実行
 
 補足
+
 - 本リポジトリは Google Drive 配下に存在します。長いパスや日本語パスでも Node/Expo は動作しますが、問題が発生する場合はローカルパス直下に移して動作確認してください。
 
 # OpenSpot 開発計画 & セットアップガイド
