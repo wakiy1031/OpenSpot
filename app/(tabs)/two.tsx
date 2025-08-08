@@ -9,7 +9,7 @@ import { StyleSheet, Text, View } from 'react-native';
  * セカンドタブ
  * @returns {JSX.Element} 画面
  */
-export default function secondTabScreen(): JSX.Element {
+export default function SecondTabScreen(): JSX.Element {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Second</Text>

@@ -5,7 +5,7 @@ import { StyleSheet, Text, View } from 'react-native';
  * NotFound 画面
  * @returns {JSX.Element} 404 代替画面
  */
-export default function notFoundScreen(): JSX.Element {
+export default function NotFoundScreen(): JSX.Element {
   return (
     <>
       <Stack.Screen options={{ title: 'Oops!' }} />

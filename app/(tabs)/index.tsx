@@ -9,7 +9,7 @@ import { StyleSheet, Text, View } from 'react-native';
  * ホームタブ
  * @returns {JSX.Element} 画面
  */
-export default function homeTabScreen(): JSX.Element {
+export default function HomeTabScreen(): JSX.Element {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>OpenSpot</Text>

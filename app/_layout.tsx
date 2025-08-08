@@ -6,9 +6,10 @@
  * @limitations 制限事項:
  * - スプラッシュ制御やフォントの事前ロードは簡素化のため省略している。
  */
+import 'react-native-reanimated';
+
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
-import 'react-native-reanimated';
 import { useColorScheme } from 'react-native';
 
 export { ErrorBoundary } from 'expo-router';
@@ -21,7 +22,7 @@ export const unstable_settings = {
  * ルートレイアウトコンポーネント
  * @returns {JSX.Element} ルートレイアウト
  */
-export default function rootLayout(): JSX.Element {
+export default function RootLayout(): JSX.Element {
   const colorScheme = useColorScheme();
 
   return (

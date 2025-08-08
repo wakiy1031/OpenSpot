@@ -6,14 +6,14 @@
  * @limitations 制限事項:
  * - アイコンやカスタムヘッダーは簡素化のため省略。
  */
-import React from 'react';
 import { Tabs } from 'expo-router';
+import React from 'react';
 
 /**
  * タブレイアウト
  * @returns {JSX.Element} タブレイアウト
  */
-export default function tabLayout(): JSX.Element {
+export default function TabLayout(): JSX.Element {
   return (
     <Tabs screenOptions={{ headerShown: false }}>
       <Tabs.Screen name="index" options={{ title: 'Home' }} />
