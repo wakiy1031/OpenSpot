@@ -24,5 +24,3 @@ export const useAppStore = create<AppState>((set) => ({
   theme: 'light',
   setTheme: (next) => set({ theme: next }),
 }));
-
-
