@@ -1,9 +1,11 @@
 import { Link, Stack } from 'expo-router';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
-import { Text, View } from '@/components/Themed';
-
-export default function NotFoundScreen() {
+/**
+ * NotFound 画面
+ * @returns {JSX.Element} 404 代替画面
+ */
+export default function notFoundScreen(): JSX.Element {
   return (
     <>
       <Stack.Screen options={{ title: 'Oops!' }} />

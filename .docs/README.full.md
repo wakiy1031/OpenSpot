@@ -1,3 +1,74 @@
+# OpenSpot
+
+このリポジトリは Expo（expo-router / tabs テンプレート）で構築した React Native アプリのモノレポ構成です。ルート直下に `app/`（画面・ルーティング）と `assets/`（画像・フォント）を持つ構成です。
+
+目標
+
+- **開発環境のセットアップ**を素早く終え、iOS/Android/Web のいずれでも Expo 上で動作確認できる状態にする
+- 以降の実装に備え、基本的なフォルダ構成と起動コマンドを整備する
+
+前提条件
+
+- Node.js 20 以上（LTS 推奨）
+- npm 10 以上
+- iOS 実機/シミュレータ起動: Xcode（macOS のみ）
+- Android 実機/エミュレータ起動: Android Studio（SDK/エミュレータ含む）
+- モバイル実機で確認する場合は Expo Go アプリ（App Store / Google Play）
+
+初期セットアップ（初回のみ）
+
+1. 依存関係をインストール
+   - ルートに移動して以下を実行
+     - `npm install`
+2. 動作確認
+   - 開発サーバ起動（安定化のため localhost モード）: `npm run start`
+   - iOS シミュレータ: `npm run ios`
+   - Android エミュレータ: `npm run android`
+   - Web: `npm run web`
+
+日常開発フロー
+
+1. 開発サーバを起動（`npm run start`）
+2. 端末またはシミュレータで確認（`npm run ios` / `npm run android` / `npm run web`）
+3. テスト（任意）: `npm test`
+
+ディレクトリ構成（要点）
+
+```
+OpenSpot/
+  app/                     # 画面・ルーティング（expo-router）
+  assets/                  # 画像・フォントなどの静的アセット
+  components/              # 再利用可能な UI コンポーネント
+  constants/               # 定数定義
+  app.json                 # Expo 設定
+  package.json             # スクリプトと依存
+  tsconfig.json            # TypeScript 設定
+  README.project.md        # 旧 README の退避コピー
+```
+
+よくあるトラブルと対処
+
+- iOS/Android のビルドが開始しない
+  - Xcode / Android Studio のセットアップ（コマンドラインツール、SDK、エミュレータ）を確認
+  - `npm run start` 実行後に `i` または `a` キーで起動できない場合は各スクリプトを使用
+- Metro Bundler のキャッシュ不整合
+  - サーバ停止後に `rm -rf node_modules && npm install` を実行
+  - 接続モードの切替で改善する場合あり: LAN（`npm run start:lan`）、トンネル（`npm run start:tunnel`）
+- ポート衝突
+  - 既存の Metro/Expo が動作していないか確認し、不要なプロセスを停止
+
+スクリプト一覧
+
+- `npm run start`: Expo 開発サーバ起動
+- `npm run ios`: iOS シミュレータ起動
+- `npm run android`: Android エミュレータ起動
+- `npm run web`: Web 起動
+- `npm test`: Jest によるテスト実行
+
+補足
+
+- 本リポジトリは Google Drive 配下に存在します。長いパスや日本語パスでも Node/Expo は動作しますが、問題が発生する場合はローカルパス直下に移して動作確認してください。
+
 # OpenSpot 開発計画 & セットアップガイド
 
 > **あなたのための『開かれた場所』を見つけよう**
@@ -45,7 +116,7 @@
  * commercial: デパート、ショッピングモールなどの商業施設
  * outdoor: 公園、広場など
  */
-export type SpotCategory = "public" | "commercial" | "outdoor";
+export type SpotCategory = 'public' | 'commercial' | 'outdoor';
 
 /**
  * 電源コンセントの利用可能性
@@ -53,7 +124,7 @@ export type SpotCategory = "public" | "commercial" | "outdoor";
  * some: 一部の席で利用可能
  * plentiful: 多くの席で利用可能
  */
-export type PowerOutletLevel = "none" | "some" | "plentiful";
+export type PowerOutletLevel = 'none' | 'some' | 'plentiful';
 
 /**
  * 飲食に関するポリシー
@@ -61,7 +132,7 @@ export type PowerOutletLevel = "none" | "some" | "plentiful";
  * drinks_only: 蓋付きの飲み物のみ可
  * bento_ok: 弁当などの持ち込み可
  */
-export type FoodPolicy = "none" | "drinks_only" | "bento_ok";
+export type FoodPolicy = 'none' | 'drinks_only' | 'bento_ok';
 
 export interface Spot {
   id: string; // 一意の識別子 (例: 'google_places_xxxx', 'user_yyyy')
@@ -205,7 +276,7 @@ npx expo install react-native-maps @shopify/flash-list zustand @react-native-asy
 
     ```javascript
     module.exports = {
-      arrowParens: "always",
+      arrowParens: 'always',
       singleQuote: true,
       jsxSingleQuote: true,
       tabWidth: 2,
@@ -228,26 +299,21 @@ npx expo install react-native-maps @shopify/flash-list zustand @react-native-asy
 ### Step 4: MVP 機能の初期構築（最初のコーディングセッション）
 
 1.  **型定義ファイル作成**:
-
     - **ファイル**: `src/types/spot.ts`
     - **内容**: Part 1 で定義した`Spot`インターフェースとその関連型を記述します。
 
 2.  **ダミーデータ API 層作成**:
-
     - **ファイル**: `src/lib/api.ts`
     - **内容**: `getSpots(): Promise<Spot[]>` という非同期関数を作成します。内部では`setTimeout`を使い、大阪駅周辺の緯度経度を持つダミーの`Spot`データを 3〜5 件、2 秒後に返すようにします。
 
 3.  **ナビゲーション骨格の修正**:
-
     - **`src/app/(tabs)/_layout.tsx`**: 「マップ」と「リスト」の 2 つのタブが正しく設定されていることを確認します。
     - **`src/app/_layout.tsx`**: アプリ全体の`Stack`ナビゲーターを定義し、`(tabs)`と、後々作成する`spot/[id]`のスクリーンを含めます。
 
 4.  **主要コンポーネントの雛形作成**:
-
     - **`src/components/modules/SpotMap.tsx`**: `MapView`をラップし、`Spot[]`を Props として受け取るコンポーネントの雛形を作成します。
     - **`src/components/modules/SpotListItem.tsx`**: `Spot`を 1 つ Props として受け取り、スポット名と住所を表示するシンプルなコンポーネントの雛形を作成します。
 
 5.  **画面への機能組み込み**:
-
     - **`src/app/(tabs)/index.tsx` (マップ画面)**: `useEffect`内で`lib/api.ts`の`getSpots`を呼び出し、取得したスポットデータを`useState`で管理します。ローディング状態も管理してください。取得したデータを`SpotMap`コンポーネントに渡します。
     - **`src/app/(tabs)/list.tsx` (リスト画面)**: 同様に`getSpots`でデータを取得し、ローディング中はインジケーターを表示します。取得したデータを`@shopify/flash-list`に渡し、`renderItem`で`SpotListItem`コンポーネントを描画します。
