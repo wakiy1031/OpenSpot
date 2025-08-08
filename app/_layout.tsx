@@ -7,13 +7,14 @@
  * - スプラッシュ制御やフォントの事前ロードは簡素化のため省略している。
  */
 import 'react-native-reanimated';
+import '@/i18n';
 
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from 'expo-router';
 import { useColorScheme } from 'react-native';
-import { QueryClientProvider } from '@tanstack/react-query';
+
 import { queryClient } from '@/lib/queryClient';
-import '@/i18n';
 
 export { ErrorBoundary } from 'expo-router';
 

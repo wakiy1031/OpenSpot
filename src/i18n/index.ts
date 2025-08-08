@@ -5,8 +5,8 @@
 import * as Localization from 'expo-localization';
 import { I18n } from 'i18n-js';
 
-import ja from './ja.json';
 import en from './en.json';
+import ja from './ja.json';
 
 /**
  * i18n インスタンス
@@ -27,5 +27,3 @@ i18n.locale = Localization.getLocales()?.[0]?.languageCode ?? 'ja';
 export function t(key: string, params?: Record<string, unknown>): string {
   return i18n.t(key, params);
 }
-
-
