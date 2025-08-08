@@ -114,16 +114,18 @@ export interface Spot {
 - **ディレクトリ構造**: 以下の構造を厳守してください。
 ```
 
+app/ # Expo Router のルーティング定義（ルート直下に固定）
 src/
-├── app/ \# Expo Router のルーティング定義
-├── assets/ \# 画像、フォントなど
 ├── components/
-│ ├── ui/ \# 基本的な UI 部品 (Atoms) -例: Button, Input
-│ └── modules/ \# 複合コンポーネント (Molecules/Organisms) -例: SpotCard
-├── constants/ \# 定数（色、API エンドポイントなど）
-├── hooks/ \# カスタム React フック (例: useSpots.ts)
-├── lib/ \# UI に依存しないビジネスロジック (例: api.ts)
-└── types/ \# TypeScript の型定義 (例: spot.ts)
+│ ├── ui/ # 基本 UI (Atoms)
+│ └── modules/ # 複合 UI (Molecules/Organisms)
+├── constants/ # 定数（色、API エンドポイントなど）
+├── hooks/ # カスタム React フック (例: useSpots.ts)
+├── lib/ # UI に依存しないビジネスロジック (例: api.ts)
+├── store/ # グローバル状態（Zustand など）
+├── types/ # TypeScript の型定義 (例: spot.ts)
+├── i18n/ # 多言語（辞書/初期化）
+└── utils/ # 横断ユーティリティ
 
 ```
 - **命名規則**:
@@ -133,7 +135,7 @@ src/
 ## 3. コンポーネント設計
 - **Props**: コンポーネントのPropsは、ファイル内で`type`または`interface`を用いて明示的に型定義してください。
 - **スタイリング**: `StyleSheet.create`を使用してスタイルを定義し、インラインスタイルはパフォーマンス上の理由がある場合を除き避けてください。
-- **状態管理**: コンポーネント固有の単純な状態は`useState`を使用します。複数のコンポーネントで共有される状態や非同期ロジックは、Zustandを用いたカスタムフック（`src/hooks/`）に分離してください。
+- **状態管理**: コンポーネント固有の単純な状態は`useState`を使用します。複数のコンポーネントで共有される状態や非同期ロジックは、Zustand（`src/store/`）と TanStack Query（`src/lib/`）に分離します。
 
 ## 4. プロンプトの形式
 - **ファイルの新規作成**: `// Create file: src/components/ui/Button.tsx` のようにコメントで指示してください。
