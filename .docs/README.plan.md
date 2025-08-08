@@ -246,3 +246,44 @@ npx expo install react-native-maps @shopify/flash-list zustand @react-native-asy
 5.  **画面への機能組み込み**:
     - **`src/app/(tabs)/index.tsx` (マップ画面)**: `useEffect`内で`lib/api.ts`の`getSpots`を呼び出し、取得したスポットデータを`useState`で管理します。ローディング状態も管理してください。取得したデータを`SpotMap`コンポーネントに渡します。
     - **`src/app/(tabs)/list.tsx` (リスト画面)**: 同様に`getSpots`でデータを取得し、ローディング中はインジケーターを表示します。取得したデータを`@shopify/flash-list`に渡し、`renderItem`で`SpotListItem`コンポーネントを描画します。
+
+---
+
+## Part 4: ブランチ戦略（GitHub Flow ベース）
+
+### 方針
+
+- `main`: 常にデプロイ可能な安定ブランチ（保護設定、直接 push 禁止）
+- 機能/作業単位で短命のトピックブランチを作成し、PR 経由で `main` にマージ
+- PR 必須要件: CI（lint/test）成功、コードレビュー 1 名以上の承認
+
+### ブランチ命名規則
+
+- `feature/<短い要約>`: 新機能（例: `feature/map-view`）
+- `fix/<短い要約>`: 不具合修正（例: `fix/ios-startup-localhost`）
+- `chore/<短い要約>`: 依存更新/整備/構成変更（例: `chore/setup-foundation`）
+- `docs/<短い要約>`: ドキュメントのみ変更（例: `docs/branch-strategy`）
+
+### コミット規約（概要）
+
+- Conventional Commits を準拠: `feat: ... / fix: ... / chore: ... / docs: ... / refactor: ...`
+- スコープ推奨: `feat(map): ...` のように、領域を括弧で付記
+
+### リリース/タグ
+
+- マイルストーンに合わせて `vX.Y.Z` タグを作成
+- 互換性破壊がある場合は `MAJOR` を上げる（SemVer）
+
+### CI/CD
+
+- GitHub Actions: `lint` と `test` を PR/`main` push 時に実行
+- 将来的に EAS（ビルド/Submit）を release タグで自動化予定
+
+### SDK アップグレード運用
+
+- Expo SDK のメジャー更新は数週間様子見し、互換性と依存の対応状況を確認後に反映
+- 参考: SDK 追従は慎重に進める実務上の推奨 [Qiita 記事](https://qiita.com/nakapon9517/items/6b99adc29e4597ed47e1#sdk%E3%82%A2%E3%83%83%E3%83%97%E3%82%B0%E3%83%AC%E3%83%BC%E3%83%89%E3%81%B8%E3%81%AE%E8%BF%BD%E5%BE%93%E6%99%82%E3%81%AE%E6%B3%A8%E6%84%8F%E7%82%B9)
+
+### 現在の作業ブランチ
+
+- `chore/setup-foundation`: 基盤導入（Zustand、TanStack Query、react-hook-form、i18n、husky+lint-staged、CI）
