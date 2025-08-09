@@ -12,7 +12,7 @@ module.exports = ({ config }) => ({
     bundleIdentifier: 'com.openspot.app',
     supportsTablet: true,
     config: {
-      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+      googleMapsApiKey: process.env.IOS_GOOGLE_MAPS_API_KEY,
     },
   },
   android: {
@@ -24,7 +24,7 @@ module.exports = ({ config }) => ({
     },
     config: {
       googleMaps: {
-        apiKey: process.env.GOOGLE_MAPS_API_KEY,
+        apiKey: process.env.ANDROID_GOOGLE_MAPS_API_KEY,
       },
     },
     package: 'com.openspot.app',
@@ -35,13 +35,13 @@ module.exports = ({ config }) => ({
     [
       'react-native-maps',
       {
-        iosGoogleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-        androidGoogleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+        iosGoogleMapsApiKey: process.env.IOS_GOOGLE_MAPS_API_KEY,
+        androidGoogleMapsApiKey: process.env.ANDROID_GOOGLE_MAPS_API_KEY,
       },
     ],
   ],
   experiments: { typedRoutes: true },
   extra: {
-    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+    googleMapsApiKey: process.env.IOS_GOOGLE_MAPS_API_KEY,
   },
 });
