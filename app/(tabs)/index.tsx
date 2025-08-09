@@ -1,19 +1,25 @@
 /**
- * @file 概要: ホームタブの画面。
- * @spec 主な仕様:
- * - シンプルなテキストのみ表示。
+ * @file 概要: ホームタブ（地図表示）。
+ * @spec:
+ * - iOS は Google プロバイダを利用（API キー設定必須）。
+ * - Android も Google マップを利用。
  */
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
-/**
- * ホームタブ
- * @returns {JSX.Element} 画面
- */
 export default function HomeTabScreen(): JSX.Element {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>OpenSpot</Text>
-      <Text>Welcome!</Text>
+      <MapView
+        style={StyleSheet.absoluteFill}
+        provider={Platform.OS === 'ios' ? PROVIDER_GOOGLE : undefined}
+        initialRegion={{
+          latitude: 34.7025, // Osaka Station vicinity
+          longitude: 135.4959,
+          latitudeDelta: 0.05,
+          longitudeDelta: 0.05,
+        }}
+      />
     </View>
   );
 }
@@ -21,12 +27,5 @@ export default function HomeTabScreen(): JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '600',
   },
 });
