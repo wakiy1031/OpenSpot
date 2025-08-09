@@ -25,6 +25,7 @@
    - iOS シミュレータ: `npm run ios`
    - Android エミュレータ: `npm run android`
    - Web: `npm run web`
+   - 注記: iOS/Android/Web の各スクリプトは既に localhost モードで起動するため、`-- --localhost` の追記は不要です。
 
 日常開発フロー
 
@@ -36,14 +37,23 @@
 
 ```
 OpenSpot/
-  app/                     # 画面・ルーティング（expo-router）
-  assets/                  # 画像・フォントなどの静的アセット
-  components/              # 再利用可能な UI コンポーネント
-  constants/               # 定数定義
-  app.json                 # Expo 設定
-  package.json             # スクリプトと依存
-  tsconfig.json            # TypeScript 設定
-  README.project.md        # 旧 README の退避コピー
+  app/                         # 画面・ルーティング（expo-router, ルート直下に固定）
+  assets/                      # 画像・フォントなどの静的アセット
+  src/
+    components/
+      ui/                      # 基本 UI（Atoms）
+      modules/                 # 複合 UI（Molecules/Organisms）
+    hooks/                     # カスタムフック
+    lib/                       # API/クライアント/ユーティリティ
+    store/                     # グローバル状態（Zustand など）
+    types/                     # 型定義（例: spot.ts）
+    i18n/                      # 多言語
+    constants/                 # 定数/テーマ
+    utils/                     # 横断ユーティリティ
+  app.json                     # Expo 設定
+  package.json                 # スクリプトと依存
+  tsconfig.json                # TypeScript 設定（`@/` → `src/`）
+  .docs/                       # 詳細ドキュメント
 ```
 
 よくあるトラブルと対処
@@ -241,7 +251,7 @@ npx expo install react-native-maps @shopify/flash-list zustand @react-native-asy
 
 ### Step 3: プロジェクトの初期設定
 
-1.  **`tsconfig.json`の編集**: `strict`モードを有効にし、パスエイリアスを設定します。
+1.  **`tsconfig.json` の編集**: `strict` 有効、パスエイリアスを `@/* → ./src/*` に設定。
 
     ```json
     {
@@ -251,11 +261,18 @@ npx expo install react-native-maps @shopify/flash-list zustand @react-native-asy
         "paths": {
           "@/*": ["./src/*"]
         }
-      }
+      },
+      "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
     }
     ```
 
-2.  **ESLint と Prettier の設定**:
+2.  **ディレクトリ構成の作成**: 画面は `app/`（ルート直下）に置いたまま、非画面を `src/` 配下へ集約。
+
+    ```bash
+    mkdir -p src/{components/ui,components/modules,hooks,lib,store,types,i18n,constants,utils}
+    ```
+
+3.  **ESLint と Prettier の設定**:
 
     ```bash
     npm install --save-dev eslint-config-prettier
@@ -284,17 +301,7 @@ npx expo install react-native-maps @shopify/flash-list zustand @react-native-asy
     };
     ```
 
-3.  **ディレクトリ構造の作成**:
-    `app`ディレクトリを`src/app`に移動し、推奨されるディレクトリ構造を作成します。
-
-    ```bash
-    mkdir src
-    mv app src/app
-    mkdir src/assets src/components src/constants src/hooks src/lib src/types
-    mkdir src/components/ui src/components/modules
-    ```
-
-    その後、`app.json`の`expo.entryPoint`を`./src/app/index.js`（または関連するエントリーポイント）に更新する必要があるか確認してください（Expo SDK 49+では通常自動で解決されます）。
+    `app/` は移動しません。Expo Router はルート直下の `app/` を前提とします。
 
 ### Step 4: MVP 機能の初期構築（最初のコーディングセッション）
 
@@ -307,8 +314,8 @@ npx expo install react-native-maps @shopify/flash-list zustand @react-native-asy
     - **内容**: `getSpots(): Promise<Spot[]>` という非同期関数を作成します。内部では`setTimeout`を使い、大阪駅周辺の緯度経度を持つダミーの`Spot`データを 3〜5 件、2 秒後に返すようにします。
 
 3.  **ナビゲーション骨格の修正**:
-    - **`src/app/(tabs)/_layout.tsx`**: 「マップ」と「リスト」の 2 つのタブが正しく設定されていることを確認します。
-    - **`src/app/_layout.tsx`**: アプリ全体の`Stack`ナビゲーターを定義し、`(tabs)`と、後々作成する`spot/[id]`のスクリーンを含めます。
+    - **`app/(tabs)/_layout.tsx`**: 「マップ」と「リスト」の 2 つのタブを設定。
+    - **`app/_layout.tsx`**: アプリ全体の `Stack` を定義し、`(tabs)` を含めます。
 
 4.  **主要コンポーネントの雛形作成**:
     - **`src/components/modules/SpotMap.tsx`**: `MapView`をラップし、`Spot[]`を Props として受け取るコンポーネントの雛形を作成します。
