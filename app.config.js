@@ -29,7 +29,17 @@ module.exports = ({ config }) => ({
     },
     package: 'com.openspot.app',
   },
-  plugins: ['expo-router', 'expo-localization'],
+  plugins: [
+    'expo-router',
+    'expo-localization',
+    [
+      'react-native-maps',
+      {
+        iosGoogleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+        androidGoogleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+      },
+    ],
+  ],
   experiments: { typedRoutes: true },
   extra: {
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
