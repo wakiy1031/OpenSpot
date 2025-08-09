@@ -13,11 +13,14 @@ jobs:
           node-version: '20'
           cache: 'npm'
       - run: npm ci
-      - name: Run ESLint
-        run: npm run lint -- --format json -o eslint_report.json || true
-      - name: reviewdog
+      - name: reviewdog (ESLint)
         uses: reviewdog/action-eslint@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
-          eslint_flags: '--format json -o eslint_report.json'
+          # 変更差分のみに限定した注釈
+          filter_mode: added
+          # CI を失敗させない
+          fail_on_error: 'false'
+          # ESLint の実行対象
+          eslint_flags: '--ext .js,.jsx,.ts,.tsx .'
