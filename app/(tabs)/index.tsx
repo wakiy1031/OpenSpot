@@ -67,7 +67,10 @@ export default function HomeTabScreen() {
       try {
         // expo-location の型解決が環境により any になるケースへ対応: 返り値を検証してから利用
 
-        const permissionUnknown: unknown = await requestForegroundPermissionsAsync();
+        const askPerm = requestForegroundPermissionsAsync as () => Promise<unknown>;
+        const getPos = getCurrentPositionAsync as (opts: Record<string, never>) => Promise<unknown>;
+
+        const permissionUnknown: unknown = await askPerm();
         if (!isPermissionResult(permissionUnknown)) {
           if (isMountedRef.current) {
             setErrorMsg('[getCurrentLocation] 位置情報権限レスポンスの形式が不正です。引数: none');
@@ -84,7 +87,7 @@ export default function HomeTabScreen() {
           return;
         }
 
-        const locationUnknown: unknown = await getCurrentPositionAsync({});
+        const locationUnknown: unknown = await getPos({});
         if (!isSimpleLocation(locationUnknown)) {
           if (isMountedRef.current) {
             setErrorMsg('[getCurrentLocation] 現在地レスポンスの形式が不正です。引数: {}');
