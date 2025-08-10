@@ -67,7 +67,6 @@ export default function HomeTabScreen() {
       try {
         // expo-location の型解決が環境により any になるケースへ対応: 返り値を検証してから利用
 
-         
         const permissionUnknown: unknown = await requestForegroundPermissionsAsync();
         if (!isPermissionResult(permissionUnknown)) {
           if (isMountedRef.current) {
@@ -85,7 +84,6 @@ export default function HomeTabScreen() {
           return;
         }
 
-         
         const locationUnknown: unknown = await getCurrentPositionAsync({});
         if (!isSimpleLocation(locationUnknown)) {
           if (isMountedRef.current) {
@@ -99,8 +97,8 @@ export default function HomeTabScreen() {
           setInitRegion({
             latitude: coords.latitude,
             longitude: coords.longitude,
-            latitudeDelta: 0.05,
-            longitudeDelta: 0.05,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
           });
         }
       } catch (err: unknown) {
