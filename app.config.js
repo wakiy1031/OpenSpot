@@ -39,6 +39,13 @@ module.exports = ({ config }) => ({
         androidGoogleMapsApiKey: process.env.ANDROID_GOOGLE_MAPS_API_KEY,
       },
     ],
+    [
+      'expo-location',
+      {
+        locationWhenInUsePermission:
+          'このアプリでは、地図上で現在位置を表示するために位置情報を使用します。',
+      },
+    ],
   ],
   experiments: { typedRoutes: true },
   extra: {
