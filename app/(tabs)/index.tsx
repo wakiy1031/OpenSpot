@@ -8,9 +8,10 @@
  * - iOS の権限文言（NSLocationWhenInUseUsageDescription）が未設定の場合、権限要求時に失敗します。
  * - 端末・エミュレータ側で位置情報が無効な場合、取得に失敗します。
  */
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { getCurrentPositionAsync, requestForegroundPermissionsAsync } from 'expo-location';
 import { useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps';
 
 /**
@@ -52,6 +53,11 @@ export default function HomeTabScreen() {
   // 現在地を中心とした地図表示範囲（未取得時は null）
   const [initRegion, setInitRegion] = useState<Region | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const mapRef = useRef<MapView>(null);
+  const [currentCenter, setCurrentCenter] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
 
   // アンマウント後の setState を防止するためのフラグ
   const isMountedRef = useRef<boolean>(true);
@@ -104,6 +110,15 @@ export default function HomeTabScreen() {
             longitudeDelta: 0.01,
           });
         }
+
+        // 現在地取得後に保存（既存の getCurrentLocation 内）
+        setCurrentCenter({ latitude: coords.latitude, longitude: coords.longitude });
+        setInitRegion({
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        });
       } catch (err: unknown) {
         const message =
           err instanceof Error
@@ -121,18 +136,44 @@ export default function HomeTabScreen() {
       isMountedRef.current = false;
     };
   }, []);
+
   return (
     <View style={styles.container}>
       {errorMsg ? (
         <Text>{errorMsg}</Text>
       ) : (
-        <MapView
-          style={StyleSheet.absoluteFill}
-          provider={PROVIDER_GOOGLE}
-          showsUserLocation={true}
-          showsMyLocationButton={true}
-          region={initRegion || undefined}
-        ></MapView>
+        <>
+          <MapView
+            ref={mapRef}
+            style={StyleSheet.absoluteFill}
+            provider={PROVIDER_GOOGLE}
+            showsUserLocation={true}
+            showsMyLocationButton={false}
+            region={initRegion || undefined}
+          ></MapView>
+          {/* 右下にリセンターボタン（iOS/Android 共通） */}
+          <TouchableOpacity
+            onPress={() => {
+              if (!currentCenter) return;
+              mapRef.current?.animateToRegion(
+                { ...currentCenter, latitudeDelta: 0.01, longitudeDelta: 0.01 },
+                500,
+              );
+              // 代替: animateCamera
+              // mapRef.current?.animateCamera({ center: currentCenter, zoom: 16 }, { duration: 500 });
+            }}
+            style={{
+              position: 'absolute',
+              right: 16,
+              bottom: 16,
+              padding: 12,
+              borderRadius: 24,
+              backgroundColor: 'white',
+            }}
+          >
+            <MaterialIcons name="my-location" size={24} color="black" />
+          </TouchableOpacity>
+        </>
       )}
     </View>
   );
