@@ -11,7 +11,16 @@ import simpleImportSort from 'eslint-plugin-simple-import-sort';
 
 export default [
   {
-    ignores: ['node_modules', '.expo', 'dist', 'build', 'coverage', '**/*.cjs', 'eslint.config.js'],
+    ignores: [
+      'node_modules',
+      '.expo',
+      'dist',
+      'build',
+      'coverage',
+      '**/*.cjs',
+      'eslint.config.js',
+      'app.config.js',
+    ],
   },
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
